@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AddItem from "./components/AddItem";
 import SearchItem from "./components/SearchItem";
+import APIRequest from "./APIRequest";
 
 function App() {
   const API_URL = "http://localhost:3500/items"
@@ -41,7 +42,7 @@ function App() {
     
   }, [])
 
-  function handleDelete(id){
+  async function handleDelete(id){
       setItems((prevItems) => {
           return (
               prevItems.filter((item) => {
@@ -50,10 +51,16 @@ function App() {
           )
       })
       // localStorage.setItem("to_do_lists", JSON.stringify(items));
+      const deleteObject = {
+        method : "DELETE"
+      }
+      const url = API_URL+"/"+id;
+      const response = await APIRequest(url, deleteObject);
+      if(response) setFetchError(response)
   }
 
-  function handleCheck(id){
-      const newItems = items.map((item) => {
+  async function handleCheck(id){
+      const newItems =items.map((item) => {
           return item.id === id ? {...item, checked: ! item.checked} : item;
           // if(item.id === id){
           //     item = {...item, checked : !item.checked};
@@ -61,10 +68,29 @@ function App() {
           // return item;
       })
       setItems(newItems);
+      console.log(items);
       // localStorage.setItem("to_do_lists", JSON.stringify(items));
+
+      const updateItem = newItems.filter(item => item.id === id);
+      console.log(updateItem)
+
+      const updateObject= {
+        method : "PATCH",
+        headers : {
+          "Content-Type" : "application/json"
+        },
+        body : JSON.stringify({checked: updateItem[0].checked})
+      }
+
+      const url = API_URL + "/" + id;
+      console.log(url)
+
+      const response = await APIRequest(url, updateObject);
+      if(response) setFetchError(response)
+      
   }
 
-  function handleSubmit(e){
+  async function handleSubmit(e){
     e.preventDefault();
     const createNewItem = {
       id : items.length === 0 ? 1 : items[items.length - 1].id + 1,
@@ -74,6 +100,19 @@ function App() {
     setItems((prevItems) => {
       return [...prevItems, createNewItem]
     })
+
+    const createObject = {
+      method : "POST",
+      headers : {
+        "Content-Type" : "application/json"
+      },
+      body : JSON.stringify(createNewItem)
+    }
+
+    const createReq = await APIRequest(API_URL, createObject);
+    if(createReq){
+      setFetchError(createReq);
+    }
     // localStorage.setItem("to_do_lists", JSON.stringify(items));
     setNewItem("");
   }

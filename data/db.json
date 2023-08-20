@@ -1,19 +1,24 @@
 {
-    "items" : [
-        {
-            "id" : 1,
-            "checked" : true,
-            "task" : "Wake up early"
-        },
-        {
-            "id" : 2,
-            "checked" : false,
-            "task" : "Complete React course"
-        },
-        {
-            "id" : 3,
-            "checked" : false,
-            "task" : "Complete Java script course"
-        }
-    ]
+  "items": [
+    {
+      "id": 1,
+      "checked": true,
+      "task": "Wake up early"
+    },
+    {
+      "id": 2,
+      "checked": false,
+      "task": "Complete React course"
+    },
+    {
+      "id": 3,
+      "checked": true,
+      "task": "Complete Java script course"
+    },
+    {
+      "id": 4,
+      "checked": true,
+      "task": "Git"
+    }
+  ]
 }
